@@ -1,0 +1,36 @@
+name: GitHub Action
+
+on:
+  push:
+    branches:
+      - main
+jobs:
+  cd:
+    runs-on: ubuntu-latest
+
+    permissions:
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{steps.deploy.outputs.page_url}}
+
+    steps:
+      - name: clone repository
+        uses: actions/checkout@v7
+
+      - name: install
+        run: npm ci
+
+      - name: Build
+        run: npm run buil
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: dist
+
+      - name: Deploy
+        id: deploy
+        uses: actions/deploy-pages@v5
